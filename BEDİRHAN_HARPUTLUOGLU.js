@@ -102,7 +102,7 @@
                             </path>
                         </svg>
                         </button>
-                        <div class="ins-slider">                    
+                        <div class="ins-slider">                   
                             <div class="ins-product ins-slider-animation">
                                 ${productHTML}
                             </div>
@@ -133,6 +133,7 @@
 
                 .ins-carousel-container {
                     display: block;
+                    margin-left: 15px;
                 }
 
                 .ins-carousel-title {
@@ -188,8 +189,7 @@
 
                 .ins-product {
                     padding-bottom: 24px;
-                    gap: 15px;
-                    padding: 10px;
+                    gap: 20px;
                     display: flex;
                     align-items: stretch;
                     width: 335.409%;
@@ -295,7 +295,7 @@
                     }
                     
                     .ins-product {
-                        gap: 40px;
+                        gap: 28px;
                     }
                 }
             `;
@@ -310,13 +310,25 @@
 
         const updateButtons = () => {
             $('#prevBtn').prop('disabled', translation === 0);
-            $('#nextBtn').prop('disabled', translation <= -60);
+            $('#nextBtn').prop('disabled', translation <= -percentage());
         };
 
+        const percentage = () => {
+            const screenWidth = $(window).width();
+            const cardWidth = $('.ins-product-card').outerWidth(true);
+            const totalCardWidth = cardWidth * cardCount;
+            const scrollableWidth = totalCardWidth - screenWidth;
+
+            const percentage = (scrollableWidth / totalCardWidth) * 100;
+            return percentage + 20;
+        };
+
+        console.log(percentage());
+
         $('#nextBtn').on('click', () => {
-            if (translation > -60) {
+            if (translation >= -percentage()) {
                 translation -= cardCount;
-                translation = Math.max(translation, -60);
+                translation = Math.max(translation, -percentage());
                 container.css('transform', `translateX(${translation}%)`);
                 updateButtons();
             }
